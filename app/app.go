@@ -90,8 +90,10 @@ import (
 	ibchost "github.com/cosmos/ibc-go/v3/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v3/modules/core/keeper"
 	"github.com/spf13/cast"
-	"github.com/tendermint/spm/cosmoscmd"
-	"github.com/tendermint/spm/openapiconsole"
+
+	"github.com/ignite/cli/ignite/pkg/cosmoscmd"
+	"github.com/ignite/cli/ignite/pkg/openapiconsole"
+
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -522,7 +524,6 @@ func New(
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
-
 	ibcRouter.AddRoute(wasm.ModuleName, wasm.NewIBCHandler(app.WasmKeeper, app.IBCKeeper.ChannelKeeper))
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
@@ -648,13 +649,13 @@ func New(
 		upgradetypes.ModuleName,
 		ibchost.ModuleName,
 		ibctransfertypes.ModuleName,
+		// this line is used by starport scaffolding # stargate/app/endBlockers
 		authz.ModuleName,
 		nftmoduletypes.ModuleName,
 		contractmoduletypes.ModuleName,
 		tokenmoduletypes.ModuleName,
 		burnmoduletypes.ModuleName,
 		wasm.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -714,6 +715,7 @@ func New(
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 
 		// this line is used by starport scaffolding # stargate/app/appModule
+		// actually we don't use simulation maanger yet.
 
 		//nftModule,
 		//contractModule,
